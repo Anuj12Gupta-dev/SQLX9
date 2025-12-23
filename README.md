@@ -68,6 +68,44 @@ root/
 └── README.md
 ```
 
+## 🌐 Backend API Endpoints
+
+### Authentication Endpoints
+
+| Method | Endpoint | Description | Access |
+|--------|----------|-------------|--------|
+| POST | `/api/auth/signup` | Register a new student user | Public |
+| POST | `/api/auth/login` | Login user and get JWT token | Public |
+| POST | `/api/auth/admin-signup` | Create admin user (initial setup only) | Public |
+
+### Student Management Endpoints
+
+| Method | Endpoint | Description | Access |
+|--------|----------|-------------|--------|
+| GET | `/api/students/profile` | Get current student's profile | Private (Students only) |
+| GET | `/api/students` | Get all students | Private (Admin only) |
+| GET | `/api/students/:id` | Get student by ID | Private (Admin only) |
+| POST | `/api/students` | Create a new student | Private (Admin only) |
+| PUT | `/api/students/:id` | Update student | Private (Admin or student themselves) |
+| DELETE | `/api/students/:id` | Delete student | Private (Admin only) |
+
+## 🖥️ Frontend Components
+
+### Pages
+- **Login.jsx**: User authentication page
+- **Signup.jsx**: User registration page
+- **AdminDashboard.jsx**: Admin dashboard for managing students
+- **StudentDashboard.jsx**: Student dashboard for viewing and updating profile
+
+### Components
+- **ProtectedRoute.jsx**: Route protection based on user role
+
+### Context
+- **AuthContext.jsx**: Global authentication state management
+
+### Services
+- **api.js**: API service functions for backend communication
+
 ## ▶️ How to Run
 
 ### Prerequisites
@@ -112,12 +150,17 @@ root/
    npm install
    ```
 
-3. Start the development server:
+3. Create a `.env` file in the frontend directory with the following variable:
+   ```
+   VITE_API_BASE_URL=http://localhost:5000/api
+   ```
+
+4. Start the development server:
    ```bash
    npm run dev
    ```
 
-4. Open your browser and visit `http://localhost:3000`
+5. Open your browser and visit `http://localhost:5173` (or the URL shown in the terminal)
 
 ## 👥 User Roles and Flows
 
@@ -135,12 +178,45 @@ root/
 4. Edit profile information using the "Edit Profile" button
 5. Save changes or cancel editing
 
+## 🔐 Default Credentials
+
+### Admin Credentials
+- **Email**: admin@example.com
+- **Password**: Admin@123
+
+### Your Provided Credentials
+- **Email**: anujguptaj123@gmail.com
+- **Password**: anuj@123
+
+## 🏗️ Architecture
+
+### Backend Architecture
+- **Models**: User.js and Student.js define the database schemas
+- **Controllers**: Handle the business logic for authentication and student management
+- **Routes**: Define the API endpoints
+- **Middleware**: Authentication and authorization middleware
+- **Config**: Database connection configuration
+
+### Frontend Architecture
+- **Context API**: Manages global authentication state
+- **React Router**: Handles client-side routing
+- **Protected Routes**: Ensures only authorized users access specific pages
+- **API Service**: Centralized API calls to the backend
+
+## 🔒 Security Features
+
+- **Password Hashing**: All passwords are hashed using bcrypt before storage
+- **JWT Authentication**: Secure token-based authentication
+- **Role-based Access Control**: Different permissions for admin and student roles
+- **Input Validation**: Server-side validation for all user inputs
+- **Protected Routes**: Frontend and backend route protection
+
 ## 🧠 Assumptions Made
 
 1. MongoDB is installed locally or a cloud MongoDB instance is available
-2. Default ports are available (3000 for frontend, 5000 for backend)
+2. Default ports are available (5173 for frontend, 5000 for backend)
 3. Users understand how to set environment variables
-4. Admin users are created through backend API only (admin signup through frontend is disabled)
+4. Admin users are created automatically on server startup if none exists
 5. Students can only update their own profile information
 
 ## 🔮 Future Improvements
@@ -161,7 +237,7 @@ root/
 - The application uses localStorage for storing JWT tokens and user information
 - Passwords are hashed using bcrypt before being stored in the database
 - Role-based access control is implemented both on the frontend (route protection) and backend (middleware)
-- API calls are proxied from the frontend to the backend using Vite's proxy configuration
+- API calls are made directly from the frontend to the backend
 - The application follows RESTful API design principles
 
 ## ⚠️ Security Considerations
